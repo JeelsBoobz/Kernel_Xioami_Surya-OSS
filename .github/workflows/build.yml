@@ -22,7 +22,7 @@ jobs:
     steps:
 
       - name: checkout repos
-        uses: actions/checkout@v4.1.0
+        uses: actions/checkout@main
         with:
           submodules: true
 
