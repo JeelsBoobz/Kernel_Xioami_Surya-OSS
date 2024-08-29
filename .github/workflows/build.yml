@@ -30,8 +30,11 @@ jobs:
       # Run the build script
       - name: Run build script
         run: |
-          chmod +x ./build.sh
-          ./build.sh
+          chmod +x build.sh
+          ./build.sh --tools
+          ./build.sh --regen
+          ./build.sh --clean
+          ./build.sh --build
 
       # Optionally upload artifacts (e.g., built kernel images)
       - name: Upload kernel artifacts
