@@ -18,8 +18,7 @@ sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-JeelsBoobz-KSU\"|g" "arc
 if [[ $1 = "-t" || $1 = "--tools" ]]; then
 	git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 $HOME/tc/aarch64-linux-android-4.9
 	git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 $HOME/tc/arm-linux-androideabi-4.9
-	git clone -b surya https://github.com/XSans02/Weeb-Clang $HOME/tc/clang-15 --depth=1
-	touch $HOME/tc/clang-15/AndroidVersion.txt && echo -e "15" | sudo tee -a $HOME/tc/clang-15/AndroidVersion.txt > /dev/null 2>&1
+	git clone -b surya https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 $HOME/tc/clang-15 --depth=1
 fi
 
 # Regenerate defconfig file
