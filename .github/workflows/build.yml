@@ -12,12 +12,6 @@ jobs:
   build:
     permissions: write-all
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        job:
-          - { type: "WithoutKSU", id: "1" }
-          - { type: "WithKSU", id: "1" }
 
     steps:
 
@@ -33,41 +27,5 @@ jobs:
 
       - name: building kernel
         run: |
-          if [[ "${{ matrix.job.type}}" == "WithoutKSU" ]]; then
-            export KSU=false
-            chmod 777 ./build.sh
-            ./build.sh
-          elif [[ "${{ matrix.job.type}}" == "WithKSU" ]]; then
-            export KSU=true
-            chmod 777 ./build.sh
-            ./build.sh
-          else
-            exit 1
-            echo "failed ${{ matrix.job.type}}"
-          fi
-
-      - name: get info
-        run: |
-          echo "$(git rev-parse --short HEAD)" > head.txt
-          echo "$(git log --oneline -n 5 --no-decorate | sed 's/^[0-9a-f]* //' | sed 's/^/— /')" > commit.txt
-
-      - name: upload tearmoon-ksu-kernel
-        if: ${{ matrix.job.type=='WithKSU' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: tearmoon-ksu-kernel
-          path: ./*-KSU*.zip
-
-      - name: upload tearmoon-std-kernel
-        if: ${{ matrix.job.type=='WithoutKSU' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: tearmoon-std-kernel
-          path: ./*-STD*.zip
-
-      - name: upload txt
-        if: ${{  success() }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: get_info
-          path: ./*.txt
+          chmod 777 ./build.sh
+          ./build.sh
