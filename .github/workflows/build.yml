@@ -27,5 +27,4 @@ jobs:
 
       - name: building kernel
         run: |
-          chmod 777 ./build.sh
-          ./build.sh
+          bash build.sh
