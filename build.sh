@@ -61,7 +61,6 @@ fi
 
 # Setup and apply patch KernelSU in root dir
 if [ "${KSU}" = "true" ]; then
-  rm -Rf "$KERNEL_DIR"/KernelSU
   if ! [ -d "$KERNEL_DIR"/KernelSU ]; then
     curl -LSs "https://raw.githubusercontent.com/kutemeikito/KernelSU/main/kernel/setup.sh" | bash -s main
   else
