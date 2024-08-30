@@ -28,6 +28,7 @@ jobs:
       - name: checkout repos
         uses: actions/checkout@main
         with:
+          submodules: true
           fetch-depth: 0
 
       - name: configuring git environment
