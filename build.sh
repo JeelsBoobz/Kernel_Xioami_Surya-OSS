@@ -29,7 +29,7 @@ export KBUILD_BUILD_VERSION="1"
 
 if ! [ -d "${CLANG_DIR}" ]; then
   echo "Clang not found! Cloning to ${TC_DIR}..."
-  if ! git clone --depth=1 https://gitlab.com/XSans0/weebx-clang-15 ${TC_DIR}; then
+  if ! git clone --depth=1 -b clang-20.0 https://gitlab.com/kutemeikito/rastamod69-clang ${CLANG_DIR}; then
     echo "Cloning failed! Aborting..."
     exit 1
   fi
