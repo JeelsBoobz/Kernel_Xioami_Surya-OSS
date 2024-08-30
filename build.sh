@@ -24,7 +24,7 @@ else
   sed -i "s|CONFIG_KSU=.*|# CONFIG_KSU is not set |g" "arch/arm64/configs/surya_defconfig"
 fi
 TC_DIR="$HOME/toolchain/linux-x86"
-CLANG_DIR="$HOME/toolchain/linux-x86/clang-r498229b"
+CLANG_DIR="$HOME/toolchain/linux-x86/clang-r416183b1"
 GCC_64_DIR="$HOME/toolchain/aarch64-linux-android-4.9"
 GCC_32_DIR="$HOME/toolchain/arm-linux-androideabi-4.9"
 AK3_DIR="$HOME/android/AnyKernel3"
