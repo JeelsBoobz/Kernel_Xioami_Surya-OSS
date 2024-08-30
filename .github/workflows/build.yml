@@ -1,42 +1,70 @@
-name: Android Kernel Build
+name: Compile TearMoon Kernel
 
 on:
   workflow_dispatch:
+  push:
+    paths-ignore:
+      - '**.md'
+    branches:
+      - main
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        job:
+          - { type: "WithoutKSU", id: "1" }
+          - { type: "WithKSU", id: "1" }
 
     steps:
-      # Checkout the repository with submodules
-      - name: Checkout code with submodules
-        uses: actions/checkout@v3
+      - name: Remove unnecessary files
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+
+      - name: checkout repos
+        uses: actions/checkout@main
         with:
-          submodules: true
           fetch-depth: 0
 
-      # Install required packages for building kernel
-      - name: Install dependencies
+      - name: configuring git environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            bc \
-            build-essential \
-            libncurses-dev \
-            bison \
-            flex \
-            libssl-dev
+          sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
 
-      # Run the build script
-      - name: Run build script
+      - name: building
         run: |
-          chmod +x build.sh
-          ./build.sh --ksu
+          if [[ "${{ matrix.job.type}}" == "WithoutKSU" ]]; then
+            export KSU=false
+            chmod 777 ./build.sh
+            ./build.sh
+          elif [[ "${{ matrix.job.type}}" == "WithKSU" ]]; then
+            export KSU=true
+            chmod 777 ./build.sh
+            ./build.sh
+          else
+            exit 1
+            echo "failed ${{ matrix.job.type}}"
+          fi
 
-      # Optionally upload artifacts (e.g., built kernel images)
-      - name: Upload kernel artifacts
+      - name: get info
+        run: |
+          echo "$(git rev-parse --short HEAD)" > head.txt
+          echo "$(git log --oneline -n 5 --no-decorate | sed 's/^[0-9a-f]* //' | sed 's/^/— /')" > commit.txt
+
+      - name: upload
+        if: ${{ matrix.job.type=='WithKSU' }}
         uses: actions/upload-artifact@v3
         with:
-          name: kernel-build
-          path: ./*.zip
+          name: WithKSU
+          path: ./*-KSU*.zip
 
+      - name: upload
+        if: ${{ matrix.job.type=='WithoutKSU' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: WithoutKSU
+          path: ./*.zip
