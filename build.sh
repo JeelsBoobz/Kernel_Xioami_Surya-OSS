@@ -26,7 +26,7 @@ export KBUILD_BUILD_VERSION="1"
 if ! [ -d $TC_DIR ]; then
   echo "Clang not found! Cloning to ${TC_DIR}..."
   wget "$(curl -s https://raw.githubusercontent.com/XSans0/WeebX-Clang/main/main/link.txt)" -O "weebx-clang.tar.gz"
-  rm -rf $TC_DIR && mkdir $TC_DIR && tar -xvf weebx-clang.tar.gz -C $TC_DIR && rm -rf weebx-clang.tar.gz
+  mkdir $HOME/toolchain && mkdir $TC_DIR && tar -xvf weebx-clang.tar.gz -C $TC_DIR && rm -rf weebx-clang.tar.gz
   exit 1
 
 fi
