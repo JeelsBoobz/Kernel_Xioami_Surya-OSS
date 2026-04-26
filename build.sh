@@ -33,6 +33,29 @@ set_cfg() {
 	else sed -i "s/^$key=.*/# $key is not set/" "$DEFCONFIG"; fi
 }
 
+#!/bin/bash
+
+DEFCONFIG="arch/arm64/configs/surya_defconfig"
+
+echo "[*] Patching $DEFCONFIG ..."
+
+# function replace or add
+set_config() {
+    KEY=$1
+    VALUE=$2
+
+    if grep -q "^$KEY=" "$DEFCONFIG"; then
+        sed -i "s/^$KEY=.*/$KEY=$VALUE/" "$DEFCONFIG"
+    else
+        echo "$KEY=$VALUE" >> "$DEFCONFIG"
+    fi
+}
+
+# Disable module signature enforcement
+set_config CONFIG_MODULE_SIG n
+set_config CONFIG_MODULE_SIG_FORCE n
+set_config CONFIG_MODULE_SIG_ALL n
+
 # Setup Variant
 case "$1" in
 	Tiramisu)
