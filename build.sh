@@ -47,11 +47,22 @@ set_config() {
     fi
 }
 
+set_config_string() {
+    KEY=$1
+    VALUE=$2
+
+    if grep -q "^$KEY=" "$DEFCONFIG"; then
+        sed -i "s/^$KEY=.*/$KEY=\"$VALUE\"/" "$DEFCONFIG"
+    else
+        echo "$KEY=\"$VALUE\"" >> "$DEFCONFIG"
+    fi
+}
+
 # Disable module signature enforcement
 set_config CONFIG_MODULE_SIG n
 set_config CONFIG_MODULE_SIG_FORCE n
 set_config CONFIG_MODULE_SIG_ALL n
-set_config CONFIG_LOCALVERSION JeelsBoobz
+set_config_string CONFIG_LOCALVERSION JeelsBoobz
 
 # Setup Variant
 case "$1" in
