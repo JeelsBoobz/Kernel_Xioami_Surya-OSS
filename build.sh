@@ -33,10 +33,6 @@ set_cfg() {
 	else sed -i "s/^$key=.*/# $key is not set/" "$DEFCONFIG"; fi
 }
 
-#!/bin/bash
-
-DEFCONFIG="arch/arm64/configs/surya_defconfig"
-
 echo "[*] Patching $DEFCONFIG ..."
 
 # function replace or add
