@@ -51,6 +51,7 @@ set_config() {
 set_config CONFIG_MODULE_SIG n
 set_config CONFIG_MODULE_SIG_FORCE n
 set_config CONFIG_MODULE_SIG_ALL n
+set_config CONFIG_LOCALVERSION JeelsBoobz
 
 # Setup Variant
 case "$1" in
