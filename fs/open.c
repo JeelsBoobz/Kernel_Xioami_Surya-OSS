@@ -355,20 +355,9 @@ SYSCALL_DEFINE4(fallocate, int, fd, int, mode, loff_t, offset, loff_t, len)
 }
 
 
-#ifdef CONFIG_KSU
+#if defined(CONFIG_KSU) || defined(CONFIG_KSU_NEXT)
 extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
 			 int *flags);
-#endif
-
-#ifdef CONFIG_KSU_NEXT
-extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
-			 int *flags);
-#endif
-
-#ifdef CONFIG_KSU
-__attribute__((hot)) 
-extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user,
-				int *mode, int *flags);
 #endif
 
 /*
@@ -386,22 +375,12 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
 	int res;
 	unsigned int lookup_flags = LOOKUP_FOLLOW;
 
-#ifdef CONFIG_KSU
+#if defined(CONFIG_KSU) || defined(CONFIG_KSU_NEXT)
 	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 #endif
 
 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */
 		return -EINVAL;
-
-#ifdef CONFIG_KSU
-	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
-#endif
-
-#ifdef CONFIG_KSU_NEXT
-	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
-#endif
-
-	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
 
 	override_cred = prepare_creds();
 	if (!override_cred)
