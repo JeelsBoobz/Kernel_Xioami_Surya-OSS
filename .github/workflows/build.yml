@@ -43,7 +43,8 @@ jobs:
 
     - name: Building
       run: |
-        sudo apt install device-tree-compiler -y
+        sudo apt update
+        sudo apt install device-tree-compiler bc flex bison -y
         mkdir -p ${{ env.ARTIFACT }}
         chmod +x build.sh && ./build.sh ${{ env.VARIANT }} ${{ env.ROOT }} ${{ env.DATE }} ${{ env.ARTIFACT }}
 
@@ -80,7 +81,7 @@ jobs:
 
       - name: Create Git tag
         run: |
-          git tag -a "$TAG" -m "imysm tirr"
+          git tag -a "$TAG" -m "KernelSU Next Build - $TAG"
           git push origin "$TAG"
 
       - name: Upload artifacts to release
